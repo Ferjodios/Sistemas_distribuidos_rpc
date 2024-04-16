@@ -6,7 +6,7 @@
 
 #include "mensaje.h"
 #include "claves.h"
-#include
+#include "structs_handler"
 
 bool_t
 init_1_svc(int *result, struct svc_req *rqstp)
@@ -19,21 +19,15 @@ bool_t
 set_value_1_svc(struct request peticion, int *result,  struct svc_req *rqstp)
 {
 	
-	*result = set_value()
-
+	*result = set_value(peticion.key, peticion.v1, peticion.N, peticion.v2);
 	return TRUE;
 }
 
 bool_t
 get_value_1_svc(int key, struct response *result,  struct svc_req *rqstp)
 {
-	bool_t retval;
-
-	/*
-	 * insert server code here
-	 */
-
-	return retval;
+	result->error = get_value(key, result->v1, &(result->N), result->v2);
+	return TRUE;
 }
 
 bool_t
