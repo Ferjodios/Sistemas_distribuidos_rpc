@@ -17,98 +17,98 @@
 #endif
 
 int
-_init_1 (void  *argp, void *result, struct svc_req *rqstp)
+_init_rpc_1 (void  *argp, void *result, struct svc_req *rqstp)
 {
-	return (init_1_svc(result, rqstp));
+	return (init_rpc_1_svc(result, rqstp));
 }
 
 int
-_set_value_1 (struct request  *argp, void *result, struct svc_req *rqstp)
+_set_value_rpc_1 (struct request  *argp, void *result, struct svc_req *rqstp)
 {
-	return (set_value_1_svc(*argp, result, rqstp));
+	return (set_value_rpc_1_svc(*argp, result, rqstp));
 }
 
 int
-_get_value_1 (int  *argp, void *result, struct svc_req *rqstp)
+_get_value_rpc_1 (int  *argp, void *result, struct svc_req *rqstp)
 {
-	return (get_value_1_svc(*argp, result, rqstp));
+	return (get_value_rpc_1_svc(*argp, result, rqstp));
 }
 
 int
-_modify_value_1 (struct request  *argp, void *result, struct svc_req *rqstp)
+_modify_value_rpc_1 (struct request  *argp, void *result, struct svc_req *rqstp)
 {
-	return (modify_value_1_svc(*argp, result, rqstp));
+	return (modify_value_rpc_1_svc(*argp, result, rqstp));
 }
 
 int
-_delete_key_1 (int  *argp, void *result, struct svc_req *rqstp)
+_delete_key_rpc_1 (int  *argp, void *result, struct svc_req *rqstp)
 {
-	return (delete_key_1_svc(*argp, result, rqstp));
+	return (delete_key_rpc_1_svc(*argp, result, rqstp));
 }
 
 int
-_exist_1 (int  *argp, void *result, struct svc_req *rqstp)
+_exist_rpc_1 (int  *argp, void *result, struct svc_req *rqstp)
 {
-	return (exist_1_svc(*argp, result, rqstp));
+	return (exist_rpc_1_svc(*argp, result, rqstp));
 }
 
 static void
 list_service_1(struct svc_req *rqstp, register SVCXPRT *transp)
 {
 	union {
-		struct request set_value_1_arg;
-		int get_value_1_arg;
-		struct request modify_value_1_arg;
-		int delete_key_1_arg;
-		int exist_1_arg;
+		struct request set_value_rpc_1_arg;
+		int get_value_rpc_1_arg;
+		struct request modify_value_rpc_1_arg;
+		int delete_key_rpc_1_arg;
+		int exist_rpc_1_arg;
 	} argument;
 	union {
-		int init_1_res;
-		int set_value_1_res;
-		struct response get_value_1_res;
-		int modify_value_1_res;
-		int delete_key_1_res;
-		int exist_1_res;
+		int init_rpc_1_res;
+		int set_value_rpc_1_res;
+		struct response get_value_rpc_1_res;
+		int modify_value_rpc_1_res;
+		int delete_key_rpc_1_res;
+		int exist_rpc_1_res;
 	} result;
 	bool_t retval;
 	xdrproc_t _xdr_argument, _xdr_result;
 	bool_t (*local)(char *, void *, struct svc_req *);
 
 	switch (rqstp->rq_proc) {
-	case init:
+	case init_rpc:
 		_xdr_argument = (xdrproc_t) xdr_void;
 		_xdr_result = (xdrproc_t) xdr_int;
-		local = (bool_t (*) (char *, void *,  struct svc_req *))_init_1;
+		local = (bool_t (*) (char *, void *,  struct svc_req *))_init_rpc_1;
 		break;
 
-	case set_value:
+	case set_value_rpc:
 		_xdr_argument = (xdrproc_t) xdr_request;
 		_xdr_result = (xdrproc_t) xdr_int;
-		local = (bool_t (*) (char *, void *,  struct svc_req *))_set_value_1;
+		local = (bool_t (*) (char *, void *,  struct svc_req *))_set_value_rpc_1;
 		break;
 
-	case get_value:
+	case get_value_rpc:
 		_xdr_argument = (xdrproc_t) xdr_int;
 		_xdr_result = (xdrproc_t) xdr_response;
-		local = (bool_t (*) (char *, void *,  struct svc_req *))_get_value_1;
+		local = (bool_t (*) (char *, void *,  struct svc_req *))_get_value_rpc_1;
 		break;
 
-	case modify_value:
+	case modify_value_rpc:
 		_xdr_argument = (xdrproc_t) xdr_request;
 		_xdr_result = (xdrproc_t) xdr_int;
-		local = (bool_t (*) (char *, void *,  struct svc_req *))_modify_value_1;
+		local = (bool_t (*) (char *, void *,  struct svc_req *))_modify_value_rpc_1;
 		break;
 
-	case delete_key:
+	case delete_key_rpc:
 		_xdr_argument = (xdrproc_t) xdr_int;
 		_xdr_result = (xdrproc_t) xdr_int;
-		local = (bool_t (*) (char *, void *,  struct svc_req *))_delete_key_1;
+		local = (bool_t (*) (char *, void *,  struct svc_req *))_delete_key_rpc_1;
 		break;
 
-	case exist:
+	case exist_rpc:
 		_xdr_argument = (xdrproc_t) xdr_int;
 		_xdr_result = (xdrproc_t) xdr_int;
-		local = (bool_t (*) (char *, void *,  struct svc_req *))_exist_1;
+		local = (bool_t (*) (char *, void *,  struct svc_req *))_exist_rpc_1;
 		break;
 
 	default:

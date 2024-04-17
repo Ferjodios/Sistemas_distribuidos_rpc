@@ -24,14 +24,16 @@ CLIENT = cliente
 
 all: $(PROXY) $(SERVER) $(CLIENT)
 
-$(PROXY): $(PROXY_OBJECTS)
-	$(CC) -shared -o $(PROXY) $(PROXY_OBJECTS) -lrt
+$(OBJECTS_CLNT) : $(TARGETS_CLNT.c)
+	$(CC) $(CFLAGS) -fPIC -c $< -o $@
+$(PROXY): $(PROXY_OBJECTS) $(OBJECTS_CLNT)
+	$(CC) -shared -o $(PROXY) $(PROXY_OBJECTS) $(OBJECTS_CLNT) -lrt -lnsl -ltirpc
 
 $(PROXY_OBJECTS): $(PROXY_SOURCES)
 	$(CC) $(CFLAGS) -fPIC -c $< -o $@
 
-$(OBJECTS_CLNT) : $(TARGETS_CLNT.c)
-$(CLIENT): $(CLIENT_OBJECTS) $(OBJECTS_CLNT)
+
+$(CLIENT): $(CLIENT_OBJECTS) 
 	$(CC) $(CFLAGS) -o $(CLIENT) $(CLIENT_OBJECTS) -L. -lclaves -Wl,-rpath,. -lpthread -lnsl -ltirpc
 
 $(OBJECTS_SVC) : $(TARGETS_SVC.c) 

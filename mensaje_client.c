@@ -15,19 +15,19 @@ list_service_1(char *host)
 	int result_1;
 	enum clnt_stat retval_2;
 	int result_2;
-	struct request set_value_1_peticion;
+	struct request set_value_rpc_1_peticion;
 	enum clnt_stat retval_3;
 	struct response result_3;
-	int get_value_1_key;
+	int get_value_rpc_1_key;
 	enum clnt_stat retval_4;
 	int result_4;
-	struct request modify_value_1_peticion;
+	struct request modify_value_rpc_1_peticion;
 	enum clnt_stat retval_5;
 	int result_5;
-	int delete_key_1_key;
+	int delete_key_rpc_1_key;
 	enum clnt_stat retval_6;
 	int result_6;
-	int exist_1_key;
+	int exist_rpc_1_key;
 
 #ifndef	DEBUG
 	clnt = clnt_create (host, LIST_SERVICE, LIST_SERVICE_V1, "udp");
@@ -37,27 +37,27 @@ list_service_1(char *host)
 	}
 #endif	/* DEBUG */
 
-	retval_1 = init_1(&result_1, clnt);
+	retval_1 = init_rpc_1(&result_1, clnt);
 	if (retval_1 != RPC_SUCCESS) {
 		clnt_perror (clnt, "call failed");
 	}
-	retval_2 = set_value_1(set_value_1_peticion, &result_2, clnt);
+	retval_2 = set_value_rpc_1(set_value_rpc_1_peticion, &result_2, clnt);
 	if (retval_2 != RPC_SUCCESS) {
 		clnt_perror (clnt, "call failed");
 	}
-	retval_3 = get_value_1(get_value_1_key, &result_3, clnt);
+	retval_3 = get_value_rpc_1(get_value_rpc_1_key, &result_3, clnt);
 	if (retval_3 != RPC_SUCCESS) {
 		clnt_perror (clnt, "call failed");
 	}
-	retval_4 = modify_value_1(modify_value_1_peticion, &result_4, clnt);
+	retval_4 = modify_value_rpc_1(modify_value_rpc_1_peticion, &result_4, clnt);
 	if (retval_4 != RPC_SUCCESS) {
 		clnt_perror (clnt, "call failed");
 	}
-	retval_5 = delete_key_1(delete_key_1_key, &result_5, clnt);
+	retval_5 = delete_key_rpc_1(delete_key_rpc_1_key, &result_5, clnt);
 	if (retval_5 != RPC_SUCCESS) {
 		clnt_perror (clnt, "call failed");
 	}
-	retval_6 = exist_1(exist_1_key, &result_6, clnt);
+	retval_6 = exist_rpc_1(exist_rpc_1_key, &result_6, clnt);
 	if (retval_6 != RPC_SUCCESS) {
 		clnt_perror (clnt, "call failed");
 	}

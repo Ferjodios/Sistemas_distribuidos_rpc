@@ -14,11 +14,11 @@ struct request{
 
 program LIST_SERVICE{
 	version LIST_SERVICE_V1{
-		int init() = 0;
-		int set_value(struct request peticion) = 1;
-		struct response get_value(int key) = 2;
-		int modify_value(struct request peticion) = 3;
-		int delete_key(int key) = 4;
-		int exist(int key) = 5;
+		int init_rpc() = 0;
+		int set_value_rpc(struct request peticion) = 1;
+		struct response get_value_rpc(int key) = 2;
+		int modify_value_rpc(struct request peticion) = 3;
+		int delete_key_rpc(int key) = 4;
+		int exist_rpc(int key) = 5;
 	} = 1;
 } = 99;
