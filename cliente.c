@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
-#include "proxy.h"
+#include "claves.h"
 #define NUM_THREADS 50
 
 /*Prueba que el programa funciona correctamente, hace uso de la funcion
@@ -21,19 +21,19 @@ int check_program()
     double v42[] = {42.424242, 42.424242};
 
     // Establecer un valores para la lista
-    if (set_value_proxy(343, "Mi numero favorito", 3, v343) == -1)
+    if (set_value(343, "Mi numero favorito", 3, v343) == -1)
         fprintf(stderr, "Error setting value for key\n");
-    if (set_value_proxy(1, "Numeros del 1 al 9", 9, v123456789) == -1)
+    if (set_value(1, "Numeros del 1 al 9", 9, v123456789) == -1)
         fprintf(stderr, "Error setting value for key\n");
-    if (set_value_proxy(42, "Viva 42 telefonica", 2, v42) == -1)
+    if (set_value(42, "Viva 42 telefonica", 2, v42) == -1)
         fprintf(stderr, "Error setting value for key\n");
 	
     // Establecer el mismo valor nuevamente (Tiene que dar error)
-    if (set_value_proxy(343, "Mi numero favorito", 3, v343) == -1)
+    if (set_value(343, "Mi numero favorito", 3, v343) == -1)
         fprintf(stderr, "Error setting value for key\n");
 
 	//Obtener valor
-    if (get_value_proxy(343, value1_get, &N_value2_get, V_value2_get) == -1)
+    if (get_value(343, value1_get, &N_value2_get, V_value2_get) == -1)
         fprintf(stderr, "Error getting value for key.\n");
     else
     {
@@ -47,21 +47,21 @@ int check_program()
     }
 
     // Modificar un valor
-    if (modify_value_proxy(343, "Me encanta el numero este", 3, v343) == -1)
+    if (modify_value(343, "Me encanta el numero este", 3, v343) == -1)
         fprintf(stderr, "Error modifying value for key.\n");
-    if (modify_value_proxy(1, "Invasion de 42", 2, v42) == -1)
+    if (modify_value(1, "Invasion de 42", 2, v42) == -1)
         fprintf(stderr, "Error modifying value for key.\n");
 
     // Verificar la existencia de una clave
-    if (exist_proxy(343) == -1)
-        fprintf(stderr, "Error checking existence for key.\n");
+    if (exist(343) <= 0)
+        fprintf(stderr, "Key does not exist.\n");
 
     // Eliminar una clave
-    if (delete_key_proxy(343) == -1)
+    if (delete_key(343) == -1)
         fprintf(stderr, "Error deleting key\n");
 
 	//Obtener el valor de una key que no deberia existir
-    if (get_value_proxy(343, value1_get, &N_value2_get, V_value2_get) == -1)
+    if (get_value(343, value1_get, &N_value2_get, V_value2_get) == -1)
         fprintf(stderr, "Error getting value for key.\n");
     else
     {
@@ -75,8 +75,8 @@ int check_program()
     }
 
     // Verificar la existencia de una clave (No deberia existir)
-    if (exist_proxy(343) == -1)
-        fprintf(stderr, "Error checking existence for key.\n");
+    if (exist(343) <= 0)
+        fprintf(stderr, "Key does not exist.\n");
 
     return 0;
 }
@@ -97,13 +97,13 @@ int check_program_error()
     }
 
 	//Me deberia decir que imposible v1
-	if (set_value_proxy(2, v1, 3, v343) == -1)
+	if (set_value(2, v1, 3, v343) == -1)
         fprintf(stderr, "Error setting value for key\n");
 	//Me deberia decir que imposible N
-	if (set_value_proxy(2, "Mi numero favorito", -4, v343) == -1)
+	if (set_value(2, "Mi numero favorito", -4, v343) == -1)
         fprintf(stderr, "Error setting value for key\n");
 	//Me deberia decir que imposible N
-	if (set_value_proxy(2, "Mi numero favorito", 53, v343) == -1)
+	if (set_value(2, "Mi numero favorito", 53, v343) == -1)
         fprintf(stderr, "Error setting value for key\n");
 	return (0);
 }
@@ -116,14 +116,14 @@ void *hilo_cliente(void *arg)
     double V_value2[] = {1.1, 2.2, 3.3};
 
 	//Inicializa
-	if (init_proxy() == -1)
+	if (init() == -1)
 	{
-		printf("Errorn in init\n");
+		printf("Error in init\n");
 		pthread_exit(NULL);
 	}
 
     // Establecer un valor
-    if (set_value_proxy(key, value1, N_value2, V_value2) == -1)
+    if (set_value(key, value1, N_value2, V_value2) == -1)
 	{
         fprintf(stderr, "Error setting value for key %d.\n", key);
         pthread_exit(NULL);
@@ -134,7 +134,7 @@ void *hilo_cliente(void *arg)
     int N_value2_get = 3;
     double V_value2_get[N_value2_get];
 
-    if (get_value_proxy(key, value1_get, &N_value2_get, V_value2_get) == -1)
+    if (get_value(key, value1_get, &N_value2_get, V_value2_get) == -1)
 	{
         fprintf(stderr, "Error getting value for key %d.\n", key);
         pthread_exit(NULL);
@@ -142,29 +142,29 @@ void *hilo_cliente(void *arg)
 
     // Modificar un valor
     double new_V_value2[] = {4.4, 5.5, 6.6};
-    if (modify_value_proxy(key, value1, N_value2, new_V_value2) == -1)
+    if (modify_value(key, value1, N_value2, new_V_value2) == -1)
 	{
         fprintf(stderr, "Error modifying value for key %d.\n", key);
         pthread_exit(NULL);
     }
 
     // Verificar la existencia de una clave
-    if (exist_proxy(key) == -1)
+    if (exist(key) <= 0)
 	{
-        fprintf(stderr, "Error checking existence for key %d.\n", key);
+        fprintf(stderr, "Key does not exist %d.\n", key);
         pthread_exit(NULL);
     }
     // Eliminar una clave
-    if (delete_key_proxy(key) == -1)
+    if (delete_key(key) == -1)
 	{
         fprintf(stderr, "Error deleting key %d.\n", key);
         pthread_exit(NULL);
     }
 
     // Verificar la existencia de una clave
-    if (exist_proxy(key) == -1)
+    if (exist(key) <= 0)
 	{
-        fprintf(stderr, "Error checking existence for key %d.\n", key);
+        fprintf(stderr, "Key does not exist %d.\n", key);
         pthread_exit(NULL);
     }
     pthread_exit(NULL);
@@ -223,4 +223,3 @@ int main(int argc, char *argv[])
 		check_program_threads();
     return (0);
 }
-
