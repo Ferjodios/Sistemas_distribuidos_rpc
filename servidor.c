@@ -24,32 +24,20 @@ set_value_rpc_1_svc(struct request peticion, int *result,  struct svc_req *rqstp
 bool_t
 get_value_rpc_1_svc(int key, struct response *result,  struct svc_req *rqstp)
 {
-	result->v1.v1_val = malloc(256);
-	if (result->v1.v1_val == NULL) {
+	result->v1.v1_val = (char *)malloc(sizeof(char) * 256);
+	if (result->v1.v1_val == NULL)
+	{
         printf("Error primer malloc");
     }
-
-	result->v2.v2_val = malloc(result->N * sizeof(double));
-    if (result->v2.v2_val == NULL) {
-        
-        free(result->v1.v1_val); // Liberar la memoria asignada para v1.v1_val
-        
+	result->v2.v2_val = (double *)malloc(32 * sizeof(double));
+    if (result->v2.v2_val == NULL)
+	{
+        free(result->v1.v1_val);
         printf("Error segundo malloc");
-    }
+	}
 	result->error = get_value(key, result->v1.v1_val, &(result->N), result->v2.v2_val);
 	result->v1.v1_len = 256;
 	result->v2.v2_len = 32;
-	/*printf("v1.v1_len: %u\n", result->v1.v1_len);
-    printf("v1.v1_val: %s\n", result->v1.v1_val);
-    printf("N: %d\n", result->N);
-    printf("v2.v2_len: %u\n", result->v2.v2_len);
-    printf("v2.v2_val:\n");
-    for (int i = 0; i < 5; i++) {
-        printf("%f ", result->v2.v2_val[i]);
-    }
-    printf("\n");
-    printf("error: %d\n", result->error);*/
-
 	return TRUE;
 }
 

@@ -8,7 +8,7 @@ PROXY_OBJECTS = $(PROXY_SOURCES:.c=.o)
 PROXY = libclaves.so
 
 #SERVIDOR 
-TARGETS_SVC = mensaje_svc.c mensaje_xdr.c
+TARGETS_SVC = mensaje_svc.c
 OBJECTS_SVC = $(TARGETS_SVC:%.c=%.o)
 SERVER_SOURCES = servidor.c claves.c list.c
 SERVER_OBJECTS = $(SERVER_SOURCES:.c=.o)
@@ -40,16 +40,16 @@ $(OBJECTS_SVC) : $(TARGETS_SVC)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(SERVER): $(SERVER_OBJECTS) $(OBJECTS_SVC)
-	$(CC) $(CFLAGS) -o $(SERVER) $(SERVER_OBJECTS) $(OBJECTS_SVC) -lrt -lpthread -lnsl -ltirpc
+	$(CC) $(CFLAGS) -o $(SERVER) $(SERVER_OBJECTS) $(OBJECTS_SVC) mensaje_xdr.o -lrt -lpthread -lnsl -ltirpc
 
 runc1:
-	./cliente 1
+	env IP_TUPLAS=localhost ./cliente 1
 
 runc2:
-	./cliente 2
+	env IP_TUPLAS=localhost ./cliente 2
 
 runc3:
-	./cliente 3
+	env IP_TUPLAS=localhost ./cliente 3
 runs:
 	./servidor
 

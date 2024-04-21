@@ -92,7 +92,7 @@ int set_value(int key, char *value1, int N_value2, double *V_value2)
 	set_value_rpc_1_peticion.key = key;
 	set_value_rpc_1_peticion.N = N_value2;
 	strcpy(set_value_rpc_1_peticion.v1.v1_val, value1);
-	set_value_rpc_1_peticion.v1.v1_len = strlen(value1); // Asigna la longitud de la cadena value1 a v1_len
+	set_value_rpc_1_peticion.v1.v1_len = strlen(value1);
 	for (int i = 0; i < N_value2; i++)
 	{
     	set_value_rpc_1_peticion.v2.v2_val[i] = V_value2[i];
@@ -104,7 +104,7 @@ int set_value(int key, char *value1, int N_value2, double *V_value2)
 	}
 	clnt_destroy (clnt);
 
-	    // Liberar memoria asignada
+	// Liberar memoria asignada
     free(set_value_rpc_1_peticion.v1.v1_val);
 	free(set_value_rpc_1_peticion.v2.v2_val);
 	if (result_2 != 0)
@@ -124,9 +124,17 @@ int get_value(int key, char *value1, int *N_value2, double *V_value2)
 	enum clnt_stat retval_3;
 	struct response result_3;
 	int get_value_rpc_1_key;
-	// No se si necesito añadirle memerio dinamica
+
 	result_3.v1.v1_val = (char *)malloc(sizeof(char) * 256);
+	if (!result_3.v1.v1_val)
+		printf("Error primer malloc");
+
 	result_3.v2.v2_val = (double *)malloc(sizeof(double) * 32);
+	if (!result_3.v2.v2_val)
+	{
+		free(result_3.v1.v1_val);
+		printf("Error segundo malloc");
+	}
 	if (create_client() == -1)
 	{
 		printf("Error initialiting rpc\n");
@@ -192,22 +200,22 @@ int modify_value(int key, char *value1, int N_value2, double *V_value2)
 	}
 
 	modify_value_rpc_1_peticion.v1.v1_val = malloc(strlen(value1) + 1);
-    if (modify_value_rpc_1_peticion.v1.v1_val == NULL) {
+    if (modify_value_rpc_1_peticion.v1.v1_val == NULL)
+	{
         printf("Error allocating memory\n");
         return (-1);
     }
 	modify_value_rpc_1_peticion.v2.v2_val = malloc(N_value2 * sizeof(double));
-    if (modify_value_rpc_1_peticion.v2.v2_val == NULL) {
+    if (modify_value_rpc_1_peticion.v2.v2_val == NULL)
+	{
         printf("Error allocating memory for v2_val\n");
-        free(modify_value_rpc_1_peticion.v1.v1_val); // Liberar memoria previamente asignada
+        free(modify_value_rpc_1_peticion.v1.v1_val);
         return (-1);
     }
 	modify_value_rpc_1_peticion.key = key;
 	modify_value_rpc_1_peticion.N = N_value2;
 	strcpy(modify_value_rpc_1_peticion.v1.v1_val, value1);
 	modify_value_rpc_1_peticion.v1.v1_len = strlen(value1);
-	//memcpy(modify_value_rpc_1_peticion.v2.v2_val, V_value2, N_value2 * sizeof(double));
-	// No se si deberia meter esto
 	for (int i = 0; i < N_value2; i++)
 	{
 		modify_value_rpc_1_peticion.v2.v2_val[i] = V_value2[i];
