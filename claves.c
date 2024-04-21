@@ -162,12 +162,12 @@ int exist(int key)
 	if (exist_element(messages, key) == 0)
 	{
 		pthread_mutex_unlock(&mutex);
-		return (0);
+		return (1);
 	}
 	else
 	{
 		pthread_mutex_unlock(&mutex);
-		return (-1);
+		return (0);
 	}
 }
 

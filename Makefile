@@ -36,9 +36,11 @@ $(PROXY_OBJECTS): $(PROXY_SOURCES)
 $(CLIENT): $(CLIENT_OBJECTS) 
 	$(CC) $(CFLAGS) -o $(CLIENT) $(CLIENT_OBJECTS) -L. -lclaves -Wl,-rpath,. -lpthread -lnsl -ltirpc
 
-$(OBJECTS_SVC) : $(TARGETS_SVC.c) 
+$(OBJECTS_SVC) : $(TARGETS_SVC)
+	$(CC) $(CFLAGS) -c $< -o $@
+
 $(SERVER): $(SERVER_OBJECTS) $(OBJECTS_SVC)
-	$(CC) $(CFLAGS) -o $(SERVER) $(SERVER_OBJECTS) -lrt -lpthread -lnsl -ltirpc
+	$(CC) $(CFLAGS) -o $(SERVER) $(SERVER_OBJECTS) $(OBJECTS_SVC) -lrt -lpthread -lnsl -ltirpc
 
 runc1:
 	./cliente 1

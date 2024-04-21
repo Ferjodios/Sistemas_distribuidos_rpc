@@ -125,8 +125,8 @@ int get_value(int key, char *value1, int *N_value2, double *V_value2)
 	struct response result_3;
 	int get_value_rpc_1_key;
 	// No se si necesito añadirle memerio dinamica
-	// result_3.v1 = (char *)malloc(sizeof(char) * 256);
-	// result_3.v2 = (double *)malloc(sizeof(dobule) * 32);
+	result_3.v1.v1_val = (char *)malloc(sizeof(char) * 256);
+	result_3.v2.v2_val = (double *)malloc(sizeof(double) * 32);
 	if (create_client() == -1)
 	{
 		printf("Error initialiting rpc\n");
@@ -136,6 +136,16 @@ int get_value(int key, char *value1, int *N_value2, double *V_value2)
 	retval_3 = get_value_rpc_1(get_value_rpc_1_key, &result_3, clnt);
 	if (retval_3 != RPC_SUCCESS)
 	{
+		printf("v1.v1_len: %u\n", result_3.v1.v1_len);
+		printf("v1.v1_val: %s\n", result_3.v1.v1_val);
+		printf("N: %d\n", result_3.N);
+		printf("v2.v2_len: %u\n", result_3.v2.v2_len);
+		printf("v2.v2_val:\n");
+		for (int i = 0; i < 5; i++) {
+		printf("%f ", result_3.v2.v2_val[i]);
+		}
+		printf("\n");
+		printf("error: %d\n", result_3.error);
 		clnt_perror (clnt, "call failed");
 	}
 	clnt_destroy (clnt);
@@ -143,8 +153,8 @@ int get_value(int key, char *value1, int *N_value2, double *V_value2)
 	if (result_3.error != 0)
 	{
 		printf("Error in get_value\n");
-		// free(result_3.v1);
-		// free(result_3.v2);
+		free(result_3.v1.v1_val);
+		free(result_3.v2.v2_val);
 		return (-1);
 	}
 	else
@@ -159,8 +169,8 @@ int get_value(int key, char *value1, int *N_value2, double *V_value2)
 			V_value2[i] = result_3.v2.v2_val[i];
 		}
 		printf("\n");
-		// free(result_3.v1);
-		// free(result_3.v2);
+		free(result_3.v1.v1_val);
+		free(result_3.v2.v2_val);
 		return (0);
 	}
 }
@@ -196,10 +206,13 @@ int modify_value(int key, char *value1, int N_value2, double *V_value2)
 	modify_value_rpc_1_peticion.N = N_value2;
 	strcpy(modify_value_rpc_1_peticion.v1.v1_val, value1);
 	modify_value_rpc_1_peticion.v1.v1_len = strlen(value1);
-	memcpy(modify_value_rpc_1_peticion.v2.v2_val, V_value2, N_value2 * sizeof(double));
+	//memcpy(modify_value_rpc_1_peticion.v2.v2_val, V_value2, N_value2 * sizeof(double));
 	// No se si deberia meter esto
-	// for (int i = 0; i < N_value2; i++)
-    // 	modify_value_rpc_1_peticion.v2[i] = V_value2[i];
+	for (int i = 0; i < N_value2; i++)
+	{
+		modify_value_rpc_1_peticion.v2.v2_val[i] = V_value2[i];
+	}
+	modify_value_rpc_1_peticion.v2.v2_len = N_value2;
 	retval_4 = modify_value_rpc_1(modify_value_rpc_1_peticion, &result_4, clnt);
 	if (retval_4 != RPC_SUCCESS)
 	{
@@ -250,7 +263,7 @@ int delete_key(int key)
 	}
 }
 
-int exist_proxy(int key)
+int exist(int key)
 {
 	enum clnt_stat retval_6;
 	int result_6;
